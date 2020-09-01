@@ -33,12 +33,19 @@ class Testing extends Component {
     }
 
     onAnswerClickHandler = (answerId) => {
+        if (this.state.answerState) {
+            const key = Object.keys(this.state.answerState)[0]
+            if (this.state.answerState[key] === 'success') {
+                return
+            }
+        }
+
         const question = this.state.testing[this.state.activeQuestion]
 
         if (question.correctAnswer === answerId) {
 
             this.setState({
-                answerState: {[answerId]: 'success'}
+                answerState: { [answerId]: 'success' }
             })
 
             const timeout = window.setTimeout(() => {
@@ -56,7 +63,7 @@ class Testing extends Component {
 
         } else {
             this.setState({
-                answerState: {[answerId]: 'error'}
+                answerState: { [answerId]: 'error' }
             })
         }
 

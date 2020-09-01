@@ -1,5 +1,7 @@
 import React from 'react'
+import AnswersList from '../../components/ActiveTesting/AnswersList/AnswersList'
 import classes from './ActiveTesting.module.css'
+
 
 const ActiveTesting = props => {
     return (
@@ -7,17 +9,12 @@ const ActiveTesting = props => {
             <p className={classes.Question}>
                 <span>
                     <strong>1.</strong>&nbsp;
-                    Кто тако веб разработчик?
+                    Кто такой веб разработчик?
                 </span>
-                <small>4 из 12</small>
+                <small>1 из 12</small>
             </p>
 
-            <ul>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-            </ul>
+            <AnswersList answers={props.answers} />
         </div>
     )
 }

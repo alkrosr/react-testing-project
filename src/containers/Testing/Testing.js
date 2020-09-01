@@ -5,8 +5,9 @@ import classes from './Testing.module.css'
 class Testing extends Component {
     state = {
         activeQuestion: 0,
+        answerState: null, // Начальное состояние фона для ответа { [id: 'success' 'error'] }
         testing: [
-            {   
+            {
                 question: 'Сколько будет 2 + 2 ?',
                 correctAnswer: 4, // Правльный ответ (id)
                 id: 1,
@@ -17,7 +18,7 @@ class Testing extends Component {
                     { text: '4', id: 4 },
                 ]
             },
-            {   
+            {
                 question: 'Сколько будет 2 * 2 ?',
                 correctAnswer: 4, // Правльный ответ (id)
                 id: 2,
@@ -32,11 +33,37 @@ class Testing extends Component {
     }
 
     onAnswerClickHandler = (answerId) => {
-        console.log('Answer id', answerId)
+        const question = this.state.testing[this.state.activeQuestion]
 
-        this.setState({
-            activeQuestion: this.state.activeQuestion + 1
-        })
+        if (question.correctAnswer === answerId) {
+
+            this.setState({
+                answerState: {[answerId]: 'success'}
+            })
+
+            const timeout = window.setTimeout(() => {
+                if (this.isTesting()) {
+                    console.log('Finished')
+                } else {
+                    this.setState({
+                        activeQuestion: this.state.activeQuestion + 1,
+                        answerState: null
+                    })
+                }
+
+                window.clearTimeout(timeout)
+            }, 1000)
+
+        } else {
+            this.setState({
+                answerState: {[answerId]: 'error'}
+            })
+        }
+
+    }
+
+    isTesting() {
+        return this.state.activeQuestion + 1 === this.state.testing.length
     }
 
     render() {
@@ -50,6 +77,7 @@ class Testing extends Component {
                         onAnswerClick={this.onAnswerClickHandler}
                         testingLength={this.state.testing.length}
                         answerNumber={this.state.activeQuestion + 1}
+                        state={this.state.answerState}
                     />
                 </div>
             </div>

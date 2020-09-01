@@ -1,15 +1,11 @@
 import React from 'react';
 import Layout from './hoc/Layout/Layout'
+import Testing from './containers/Testing/Testing'
 
 function App() {
   return (
     <Layout>
-
-
-
-      <div style={{width: 400, border: '1px solid black'}}>
-        <h1>Hi Aleksey Krotenko</h1>
-      </div>
+      <Testing />
     </Layout>
   );
 }

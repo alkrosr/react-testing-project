@@ -4,14 +4,14 @@ import classes from './MenuToggle.module.css'
 const MenuToggle = props => {
     const cls = [
         classes.MenuToggle,
-        'fa'
+        classes.burger
     ]
 
     if (props.isOpen) {
-        cls.push('fa-times')
+        cls.push(classes.red)
         cls.push(classes.open)
     } else {
-        cls.push('fa-bars')
+        cls.push(classes.white)
     }
 
     return (

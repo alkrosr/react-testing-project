@@ -12,7 +12,7 @@ class Drawer extends Component {
             return (
                 <li key={index}>
                     <a>
-                        link {link}
+                        link is {link}
                     </a>
                 </li>
             )
@@ -34,9 +34,11 @@ class Drawer extends Component {
                     </ul>
                 </nav>
                 {this.props.isOpen ? <BackDrop onClick={this.props.onClose} /> : null}
+                
             </React.Fragment>
         )
     }
+
 }
 
 export default Drawer

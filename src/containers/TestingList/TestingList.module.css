@@ -1,0 +1,32 @@
+.TestingList {
+    display: flex;
+    justify-content: center;
+    padding-top: 100px;
+    flex-grow: 1;
+    width: 100%;
+    background: linear-gradient(90deg, #fd8355 0%, #f0576c 37%, #f79cbd 100%);
+}
+
+.TestingList h1 {
+    color: #fff;
+}
+
+.TestingList ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.TestingList ul li {
+    margin-bottom: 10px;
+}
+
+.TestingList ul li a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.TestingList ul li a:hover {
+    
+    color: #363f54;
+}

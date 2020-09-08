@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import classes from './TestingList.module.css'
 import { NavLink } from 'react-router-dom'
+import Loader from '../../components/UI/Loader/Loader'
 import axios from 'axios'
 
 class TestingList extends Component {
 
     state = {
-        testinges: []
+        testinges: [],
+        loading: true
     }
 
 
@@ -34,7 +36,7 @@ class TestingList extends Component {
             })
 
             this.setState({
-                testinges
+                testinges, loading: false
             })
         } catch (e) {
             console.log(e)
@@ -53,9 +55,12 @@ class TestingList extends Component {
                 <div>
                     <h1>Список тестов</h1>
 
-                    <ul>
-                        {this.renderTesting()}
-                    </ul>
+                    {this.state.loading
+                        ? <Loader />
+                        : <ul>
+                            {this.renderTesting()}
+                        </ul>
+                    }
                 </div>
             </div>
         )

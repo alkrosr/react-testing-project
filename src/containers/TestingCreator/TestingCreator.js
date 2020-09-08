@@ -5,6 +5,8 @@ import Input from '../../components/UI/Input/Input'
 import Select from '../../components/UI/Select/Select'
 import { createControl, validate, validateForm } from '../../form/formFramework'
 import Auxiliary from '../../hoc/Auxiliary/Auxiliary'
+import axios from 'axios'
+
 
 function createOptionControl(number) {
     return createControl({
@@ -45,17 +47,17 @@ class TestingCreator extends Component {
         const testing = this.state.testing.concat()
         const index = testing.length + 1
 
-        const {question, option1, option2, option3, option4} = this.state.formControls
+        const { question, option1, option2, option3, option4 } = this.state.formControls
 
         const questionItem = {
             question: question.value,
             id: index,
             rightAnswerId: this.state.rightAnswerId,
             answers: [
-                {text: option1.value, id: option1.id},
-                {text: option2.value, id: option2.id},
-                {text: option3.value, id: option3.id},
-                {text: option4.value, id: option4.id}
+                { text: option1.value, id: option1.id },
+                { text: option2.value, id: option2.id },
+                { text: option3.value, id: option3.id },
+                { text: option4.value, id: option4.id }
             ]
         }
 
@@ -69,11 +71,32 @@ class TestingCreator extends Component {
         })
     }
 
-    createTestingHandler = (event) => {
+    // createTestingHandler = (event) => {
+    //     event.preventDefault()
+    //     axios.post('https://react-testing-d6141.firebaseio.com/testinges.json', this.state.testing).then(response => {
+    //         console.log(response)
+    //     })
+    //     .catch(error => console.log(error))
+    // }
+
+    createTestingHandler = async (event) => {
         event.preventDefault()
 
-        console.log(this.state.testing)
-        // TODO: Server
+        try {
+            await axios.post('https://react-testing-d6141.firebaseio.com/testinges.json', this.state.testing)
+            // Обнуляем форму
+            this.setState({
+                testing: [],
+                isFormValid: false,
+                rightAnswerId: 1,
+                formControls: createFormControls()
+            })
+
+
+        } catch (e) {
+            console.log(e)
+        }
+
     }
 
     changeHandler = (value, controlName) => {
@@ -95,21 +118,21 @@ class TestingCreator extends Component {
     renderControls() {
         return Object.keys(this.state.formControls).map((controlName, index) => {
             const control = this.state.formControls[controlName]
- 
+
             return (
                 <Auxiliary key={controlName + index}>
-                  <Input
-                    label={control.label}
-                    value={control.value}
-                    valid={control.valid}
-                    shouldValidate={!!control.validation}
-                    touched={control.touched}
-                    errorMessage={control.errorMessage}
-                    onChange={event => this.changeHandler(event.target.value, controlName)}
-                  />
-                  { index === 0 ? <hr /> : null }
+                    <Input
+                        label={control.label}
+                        value={control.value}
+                        valid={control.valid}
+                        shouldValidate={!!control.validation}
+                        touched={control.touched}
+                        errorMessage={control.errorMessage}
+                        onChange={event => this.changeHandler(event.target.value, controlName)}
+                    />
+                    {index === 0 ? <hr /> : null}
                 </Auxiliary>
-              )
+            )
         })
     }
 

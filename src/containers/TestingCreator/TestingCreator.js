@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import classes from './TestingCreator.module.css'
 import Button from '../../components/UI/Button/Button'
 import Input from '../../components/UI/Input/Input'
+import Select from '../../components/UI/Select/Select'
 import { createControl } from '../../form/formFramework'
 import Auxiliary from '../../hoc/Auxiliary/Auxiliary'
 
@@ -29,6 +30,7 @@ function createFormControls() {
 class TestingCreator extends Component {
     state = {
         testing: [],
+        rightAnswerId: 1,
         formControls: createFormControls()
     }
 
@@ -69,7 +71,24 @@ class TestingCreator extends Component {
         })
     }
 
+    selectChangeHandler = (event) => {
+        this.setState({
+            rightAnswerId: event.target.value
+        })
+    }
+
     render() {
+        const select = <Select
+            label='Выберите правильный ответ'
+            value={this.state.rightAnswerId}
+            onChange={this.selectChangeHandler}
+            option={[
+                { text: 1, value: 1 },
+                { text: 2, value: 2 },
+                { text: 3, value: 3 },
+                { text: 4, value: 4 }
+            ]}
+        />
         return (
             <div className={classes.TestingCreator}>
                 <div>
@@ -78,7 +97,7 @@ class TestingCreator extends Component {
 
                         {this.renderControls()}
 
-                        <select></select>
+                        {select}
 
                         <Button
                             type='primary'

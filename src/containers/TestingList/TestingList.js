@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import classes from './TestingList.module.css'
 import { NavLink } from 'react-router-dom'
+import axios from 'axios'
 
 class TestingList extends Component {
     renderTesting() {
@@ -12,6 +13,12 @@ class TestingList extends Component {
                     </NavLink>
                 </li>
             )
+        })
+    }
+
+    componentDidMount() {
+        axios.get('https://react-testing-d6141.firebaseio.com/testing.json').then(response => {
+            console.log(response)
         })
     }
 

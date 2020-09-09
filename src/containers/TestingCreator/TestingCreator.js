@@ -5,7 +5,7 @@ import Input from '../../components/UI/Input/Input'
 import Select from '../../components/UI/Select/Select'
 import { createControl, validate, validateForm } from '../../form/formFramework'
 import Auxiliary from '../../hoc/Auxiliary/Auxiliary'
-import axios from 'axios'
+import axios from '../../axios/axios-testing'
 
 
 function createOptionControl(number) {
@@ -83,7 +83,7 @@ class TestingCreator extends Component {
         event.preventDefault()
 
         try {
-            await axios.post('https://react-testing-d6141.firebaseio.com/testinges.json', this.state.testing)
+            await axios.post('/testinges.json', this.state.testing)
             // Обнуляем форму
             this.setState({
                 testing: [],
@@ -92,11 +92,9 @@ class TestingCreator extends Component {
                 formControls: createFormControls()
             })
 
-
         } catch (e) {
             console.log(e)
         }
-
     }
 
     changeHandler = (value, controlName) => {
@@ -138,7 +136,7 @@ class TestingCreator extends Component {
 
     selectChangeHandler = (event) => {
         this.setState({
-            rightAnswerId: event.target.value
+            rightAnswerId: +event.target.value
         })
     }
 
@@ -147,7 +145,7 @@ class TestingCreator extends Component {
             label='Выберите правильный ответ'
             value={this.state.rightAnswerId}
             onChange={this.selectChangeHandler}
-            option={[
+            options={[
                 { text: 1, value: 1 },
                 { text: 2, value: 2 },
                 { text: 3, value: 3 },

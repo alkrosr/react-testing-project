@@ -1,5 +1,5 @@
 import React from 'react'
-import AnswersList from '../../components/ActiveTesting/AnswersList/AnswersList'
+import AnswersList from './AnswersList/AnswersList'
 import classes from './ActiveTesting.module.css'
 
 

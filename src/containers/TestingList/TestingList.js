@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import classes from './TestingList.module.css'
 import { NavLink } from 'react-router-dom'
 import Loader from '../../components/UI/Loader/Loader'
-import axios from 'axios'
+import axios from '../../axios/axios-testing'
 
 class TestingList extends Component {
 
@@ -11,9 +11,8 @@ class TestingList extends Component {
         loading: true
     }
 
-
-    renderTesting() {
-        return this.state.testinges.map((testing) => {
+    renderTestinges() {
+        return this.state.testinges.map(testing => {
             return (
                 <li key={testing.id}>
                     <NavLink to={'/testing/' + testing.id}>
@@ -26,7 +25,7 @@ class TestingList extends Component {
 
     async componentDidMount() {
         try {
-            const response = await axios.get('https://react-testing-d6141.firebaseio.com/testinges.json')
+            const response = await axios.get('/testinges.json')
             const testinges = []
             Object.keys(response.data).forEach((key, index) => {
                 testinges.push({
@@ -58,7 +57,7 @@ class TestingList extends Component {
                     {this.state.loading
                         ? <Loader />
                         : <ul>
-                            {this.renderTesting()}
+                            {this.renderTestinges()}
                         </ul>
                     }
                 </div>

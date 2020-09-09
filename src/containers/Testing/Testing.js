@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import ActiveTesting from '../../components/ActiveTesting/ActiveTesting'
 import FinishedTesting from '../../components/FinishedTesting/FinishedTesting'
 import classes from './Testing.module.css'
+import axios from '../../axios/axios-testing'
+import Loader from '../../components/UI/Loader/Loader'
 
 class Testing extends Component {
     state = {
@@ -9,30 +11,8 @@ class Testing extends Component {
         isFinished: false,
         activeQuestion: 0,
         answerState: null, // Начальное состояние фона для ответа { [id: 'success' 'error'] }
-        testing: [
-            {
-                question: 'Сколько будет 2 + 2 ?',
-                correctAnswer: 4, // Правльный ответ (id)
-                id: 1,
-                answers: [
-                    { text: '1', id: 1 },
-                    { text: '2', id: 2 },
-                    { text: '3', id: 3 },
-                    { text: '4', id: 4 },
-                ]
-            },
-            {
-                question: 'Сколько будет 2 * 2 ?',
-                correctAnswer: 4, // Правльный ответ (id)
-                id: 2,
-                answers: [
-                    { text: '1', id: 1 },
-                    { text: '2', id: 2 },
-                    { text: '3', id: 3 },
-                    { text: '4', id: 4 },
-                ]
-            }
-        ]
+        testing: [],
+        loading: true
     }
 
     onAnswerClickHandler = (answerId) => {
@@ -46,16 +26,16 @@ class Testing extends Component {
         const question = this.state.testing[this.state.activeQuestion]
         const results = this.state.results
 
-        if (question.correctAnswer === answerId) {
+        if (question.rightAnswerId === answerId) {
             if (!results[question.id]) {
                 results[question.id] = 'success'
             }
             this.setState({
                 answerState: { [answerId]: 'success' },
-                results: results
+                results
             })
             const timeout = window.setTimeout(() => {
-                if (this.isTesting()) {
+                if (this.isTestingFiniched()) {
                     this.setState({
                         isFinished: true
                     })
@@ -70,13 +50,13 @@ class Testing extends Component {
         } else {
             results[question.id] = 'error'
             this.setState({
-                answerState: { [question.id]: 'error' },
-                results: results
+                answerState: { [answerId]: 'error' },
+                results
             })
         }
     }
 
-    isTesting() {
+    isTestingFiniched() {
         return this.state.activeQuestion + 1 === this.state.testing.length
     }
 
@@ -89,27 +69,45 @@ class Testing extends Component {
         })
     }
 
+    async componentDidMount() {
+        try {
+            const response = await axios.get(`/testinges/${this.props.match.params.id}.json`)
+            const testing = response.data
+
+            this.setState({
+                testing,
+                loading: false
+            })
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     render() {
         return (
             <div className={classes.Testing}>
                 <div className={classes.TestingWrapper}>
                     <h1>Пройдите тест</h1>
+
                     {
-                        this.state.isFinished
-                            ? <FinishedTesting
-                                results={this.state.results}  
-                                testing={this.state.testing}
-                                onRetry={this.retryHandler}
-                             />
-                            : <ActiveTesting
-                                answers={this.state.testing[this.state.activeQuestion].answers}
-                                question={this.state.testing[this.state.activeQuestion].question}
-                                onAnswerClick={this.onAnswerClickHandler}
-                                testingLength={this.state.testing.length}
-                                answerNumber={this.state.activeQuestion + 1}
-                                state={this.state.answerState}
-                            />
+                        this.state.loading ?
+                            <Loader /> :
+                            this.state.isFinished
+                                ? <FinishedTesting
+                                    results={this.state.results}
+                                    testing={this.state.testing}
+                                    onRetry={this.retryHandler}
+                                />
+                                : <ActiveTesting
+                                    answers={this.state.testing[this.state.activeQuestion].answers}
+                                    question={this.state.testing[this.state.activeQuestion].question}
+                                    onAnswerClick={this.onAnswerClickHandler}
+                                    testingLength={this.state.testing.length}
+                                    answerNumber={this.state.activeQuestion + 1}
+                                    state={this.state.answerState}
+                                />
                     }
+
                 </div>
             </div>
         )

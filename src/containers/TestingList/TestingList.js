@@ -2,17 +2,18 @@ import React, { Component } from 'react'
 import classes from './TestingList.module.css'
 import { NavLink } from 'react-router-dom'
 import Loader from '../../components/UI/Loader/Loader'
-import axios from '../../axios/axios-testing'
+import { connect } from 'react-redux'
+import { fetchTestinges } from '../../store/actions/testing'
 
 class TestingList extends Component {
 
-    state = {
-        testinges: [],
-        loading: true
-    }
+    // state = {
+    //     testinges: [],
+    //     loading: true
+    // }
 
     renderTestinges() {
-        return this.state.testinges.map(testing => {
+        return this.props.testinges.map(testing => {
             return (
                 <li key={testing.id}>
                     <NavLink to={'/testing/' + testing.id}>
@@ -23,23 +24,9 @@ class TestingList extends Component {
         })
     }
 
-    async componentDidMount() {
-        try {
-            const response = await axios.get('/testinges.json')
-            const testinges = []
-            Object.keys(response.data).forEach((key, index) => {
-                testinges.push({
-                    id: key,
-                    name: `Тест №${index + 1}`
-                })
-            })
-
-            this.setState({
-                testinges, loading: false
-            })
-        } catch (e) {
-            console.log(e)
-        }
+    componentDidMount() {
+        this.props.fetchTestinges()
+        
     }
 
     // componentDidMount() {
@@ -54,7 +41,7 @@ class TestingList extends Component {
                 <div>
                     <h1>Список тестов</h1>
 
-                    {this.state.loading
+                    {this.props.loading && this.props.testinges.length !== 0
                         ? <Loader />
                         : <ul>
                             {this.renderTestinges()}
@@ -66,4 +53,17 @@ class TestingList extends Component {
     }
 }
 
-export default TestingList
+function mapStateToProps(state) {
+    return {
+        testinges: state.testing.testinges,
+        loading: state.testing.loading
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        fetchTestinges: () => dispatch(fetchTestinges())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TestingList)
